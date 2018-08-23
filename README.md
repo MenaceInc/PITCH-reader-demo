@@ -1,16 +1,16 @@
 Write a program which reads PITCH data from standard input and, at the end of the input, shows a table of the top ten symbols by executed volume.  
 For example, your table should look something like this:  
   
-SPY   24486275  
-QQQQ  15996041  
-XLF   10947444  
-IWM    9362518  
-MSFT   8499146  
-DUG    8220682  
-C      6756932  
-F      6679883  
-EDS    6673983  
-QID    6526201  
+    SPY   24486275  
+    QQQQ  15996041  
+    XLF   10947444  
+    IWM    9362518  
+    MSFT   8499146  
+    DUG    8220682  
+    C      6756932  
+    F      6679883  
+    EDS    6673983  
+    QID    6526201  
   
 The PITCH specification is available from our website here: http://cdn.batstrading.com/resources/membership/BATS_US_EQUITIES_TCP_PITCH_SPECIFICATION.pdf  
   

@@ -1,0 +1,6 @@
+# ignore CLion related folders
+.idea/
+cmake-build-*/
+
+# ignore usual build folder
+build/

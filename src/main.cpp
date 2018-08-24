@@ -14,13 +14,10 @@ using std::tuple;
 using std::unordered_map;
 using std::vector;
 using fileinput = std::ifstream;
-using fileoutput = std::ofstream;
 
 using OrderID = string;
 using StockSymbol = string;
 
-
-//void processOrder(const string& order);
 
 int main(int argc, char* argv[]) {
     fileinput file;
@@ -31,37 +28,62 @@ int main(int argc, char* argv[]) {
 
     string temp;
 
-    unordered_map<OrderID, unordered_map<StockSymbol, uint64_t>> orderQueue;
+    unordered_map<OrderID, tuple<uint64_t, StockSymbol>> orderQueue;
     unordered_map<StockSymbol, uint64_t> executedOrders;
 
-    fileoutput out("output.txt");
-
     while (std::getline(std::cin, temp)) {
-        switch (temp[9]) {
+        if (temp[0] == 'S') {
+            temp.erase(0, 1);
+        }
+
+        // Something similar to this should work well
+        // auto* p = reinterpret_cast<PakFileHeader*>(&data[0]);
+
+
+        switch (temp[8]) {
             case 'A' : {
-                const auto orderID = temp.substr(10, 12);
-                const auto stockID = temp.substr(29, 6);
-                orderQueue[orderID][stockID] += std::stoll(temp.substr(23,6));
-            } break;
+                const auto orderID = temp.substr(9, 12);
+                const auto stockID = temp.substr(28, 6);
+                orderQueue[orderID] = {std::stoll(temp.substr(22, 6)), stockID};
+            }
+                break;
             case 'X' : {
-                const auto orderID = temp.substr(10, 12);
-                const auto sharesReduced = std::stoll(temp.substr(22,6));
+                const auto orderID = temp.substr(9, 12);
+                const auto sharesCancelled = std::stoll(temp.substr(21, 6));
 
                 auto& order = orderQueue[orderID];
-                auto size = order.size();
+                auto& orderShares = std::get<0>(order);
 
-                int i = 23;
-            } break;
+                if (sharesCancelled >= orderShares) {
+                    orderQueue.erase(orderID);
+                } else {
+                    orderShares -= sharesCancelled;
+                }
+            }
+                break;
             case 'E' : {
-                const auto orderID = temp.substr(10, 12);
+                const auto orderID = temp.substr(9, 12);
+                const auto sharesExecuted = std::stoll(temp.substr(21, 6));
                 auto order = orderQueue[orderID];
 
-                for(const auto& stock : order) {
-                    executedOrders[stock.first] += stock.second;
-                }
+                auto& orderShares = std::get<0>(order);
+                auto& stockname = std::get<1>(order);
 
-                orderQueue.erase(orderID);
-            } break;
+                if (sharesExecuted >= orderShares) {
+                    orderQueue.erase(orderID);
+                } else {
+                    orderShares -= sharesExecuted;
+                }
+                executedOrders[stockname] += sharesExecuted;
+            }
+                break;
+            case 'P' : {
+                const auto sharesExecuted = std::stoll(temp.substr(22, 6));
+                const auto stockname = temp.substr(28, 6);
+
+                executedOrders[stockname] += sharesExecuted;
+            }
+                break;
             default:
                 break;
         }

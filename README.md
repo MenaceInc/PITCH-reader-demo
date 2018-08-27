@@ -10,3 +10,5 @@ Can easily be extended to handle all message types and already has structs defin
     make
     cat pitch_example_data | ./PITCH_reader_demo
     ./PITCH_reader_demo pitch_example_data
+
+If using Windows and MSYS2/MinGW-w64, you'll need to change `cmake ..` for `cmake -DCMAKE_MAKE_PROGRAM=mingw32-make -G"MSYS Makefiles" ..` and change `make` for `mingw32-make`.

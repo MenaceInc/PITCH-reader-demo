@@ -1,9 +1,9 @@
 #pragma once
 
 #include <array>
-#include "AuctionTypes.h"
-#include "MessageTypes.h"
+#include "OrderTraits.h"
 
+// All message types as detailed in PITCH Specification v1.15.0
 namespace PITCH {
     struct SymbolClear {
         std::array<unsigned char, 8> timestamp;
@@ -15,23 +15,23 @@ namespace PITCH {
         std::array<unsigned char, 8> timestamp;
         MessageType messageType;
         std::array<unsigned char, 12> orderID;
-        unsigned char sideIndicator;
+        SideIndicator sideIndicator;
         std::array<unsigned char, 6> shares;
         std::array<unsigned char, 6> stock;
         std::array<unsigned char, 10> price;
-        unsigned char display;
+        Display display;
     };
 
     struct AddOrderLong {
         std::array<unsigned char, 8> timestamp;
         MessageType messageType;
         std::array<unsigned char, 12> orderID;
-        unsigned char sideIndicator;
+        SideIndicator sideIndicator;
         std::array<unsigned char, 6> shares;
         std::array<unsigned char, 8> stock;
         std::array<unsigned char, 10> price;
-        unsigned char display;
-        unsigned char participantID;
+        Display display;
+        std::array<unsigned char, 4> participantID;
     };
 
     struct OrderExecuted {
@@ -53,7 +53,7 @@ namespace PITCH {
         std::array<unsigned char, 8> timestamp;
         MessageType messageType;
         std::array<unsigned char, 12> orderID;
-        unsigned char sideIndicator;
+        SideIndicator sideIndicator;
         std::array<unsigned char, 6> shares;
         std::array<unsigned char, 6> stock;
         std::array<unsigned char, 10> price;
@@ -64,7 +64,7 @@ namespace PITCH {
         std::array<unsigned char, 8> timestamp;
         MessageType messageType;
         std::array<unsigned char, 12> orderID;
-        unsigned char sideIndicator;
+        SideIndicator sideIndicator;
         std::array<unsigned char, 6> shares;
         std::array<unsigned char, 8> stock;
         std::array<unsigned char, 10> price;
@@ -81,8 +81,8 @@ namespace PITCH {
         std::array<unsigned char, 8> timestamp;
         MessageType messageType;
         std::array<unsigned char, 8> stock;
-        unsigned char haltStatus;
-        unsigned char regSHOAction;
+        HaltStatus haltStatus;
+        RegSHOAction regSHOAction;
         unsigned char reserved1;
         unsigned char reserved2;
     };
@@ -112,6 +112,6 @@ namespace PITCH {
         std::array<unsigned char, 8> timestamp;
         MessageType messageType;
         std::array<unsigned char, 8> stock;
-        unsigned char retailPriceImprovement;
+        RPI retailPriceImprovement;
     };
 }

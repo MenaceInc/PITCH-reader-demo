@@ -66,9 +66,9 @@ auto OrderManager::processOrder(const std::string& unknownOrder) -> void {
 }
 
 void OrderManager::trade(const std::string& rawOrder) {
-    const auto* order = reinterpret_cast<const PITCH::*>(&rawOrder[0]);
-    const auto orderID = std::string(order->orderID.begin(), order->orderID.end());
-    const auto sharesExecuted = std::stoull(std::string(order->executedShares.begin(), order->executedShares.end()));
+    const auto* order = reinterpret_cast<const PITCH::Trade*>(&rawOrder[0]);
+    const auto sharesTraded = std::stoull(std::string(order->shares.begin(), order->shares.end()));
+    const auto stockName = std::string(order->stock.begin(), order->stock.end());
 
-    _book->executeOrder(orderID, sharesExecuted);
+    _book->trade(stockName, sharesTraded);
 }

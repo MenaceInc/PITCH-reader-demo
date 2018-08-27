@@ -5,7 +5,7 @@
 using namespace PITCH;
 
 
-auto OrderBook::addOrder(const std::string& orderID, const std::string& stockID, const uint64_t shares) -> void{
+auto OrderBook::addOrder(const std::string& orderID, const std::string& stockID, uint64_t shares) -> void {
     _orderQueue[orderID] = {shares, stockID};
 }
 
@@ -34,22 +34,24 @@ auto OrderBook::executeOrder(const std::string& orderID, uint64_t sharesExecuted
 }
 
 auto OrderBook::getTopTenStocks() const -> std::string {
-    std::vector<std::tuple<uint64_t, std::string>> temp;
+    // copy from map for sorting and keep const
+    std::vector<std::tuple<Shares, StockSymbol>> temp;
     temp.reserve(_executedOrders.size());
 
+    // swap stock and shares to sort by shares
     for (const auto& stock : _executedOrders) {
         temp.emplace_back(stock.second, stock.first);
     }
 
-    std::sort(temp.rbegin(), temp.rend());
+    std::sort(temp.rbegin(), temp.rend()); // reverse because want descending order
 
-    auto sharesSize = std::to_string(std::get<0>(temp[0])).size();
+    auto sharesSize = std::to_string(std::get<0>(temp[0])).size(); // needed for formatting
 
     std::string result;
 
     for (size_t i = 0; i < temp.size() and i < 10; ++i) {
         std::string line = std::get<1>(temp[i]);
-        result.append(6 - line.size(), ' ');
+        line.append(6 - line.size(), ' ');
 
         auto shares = std::to_string(std::get<0>(temp[i]));
 
@@ -60,4 +62,8 @@ auto OrderBook::getTopTenStocks() const -> std::string {
     }
 
     return result;
+}
+
+auto OrderBook::trade(const std::string& stockName, uint64_t sharesTraded) -> void {
+    _executedOrders[stockName] += sharesTraded;
 }

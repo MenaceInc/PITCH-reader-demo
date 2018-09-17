@@ -23,7 +23,7 @@ auto OrderBook::cancelOrder(const std::string& orderID, uint64_t sharesCancelled
 auto OrderBook::executeOrder(const std::string& orderID, uint64_t sharesExecuted) -> void {
     auto& order = _orderQueue[orderID];
     auto& orderShares = std::get<0>(order);
-    auto& stockID = std::get<1>(order);
+    auto stockID = std::get<1>(order);
 
     if (sharesExecuted >= orderShares) {
         _orderQueue.erase(orderID);
